@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GameManager : MonoBehaviour
 {
@@ -19,15 +22,19 @@ public class GameManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text bestScoreText;
 
+    // UI Elements to disable/enable
+    public List<GameObject> MenuElements;
+    public List<GameObject> GameElements;
+    public List<GameObject> GameOverElements;
+
     // Start is called before the first frame update
     void Start()
     {
-        GameLaunch();
-        StartGame();
+        DisplayGameMenu();
     }
 
     // Start the actual game
-    void StartGame()
+    public void StartGame()
     {
         MainManager.GameStarted = true;
         ShowGame();
@@ -42,8 +49,6 @@ public class GameManager : MonoBehaviour
                 Vector2 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
                 var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
                 brick.PointValue = pointCountArray[i];
-                // brick.onDestroyed.AddListener(MainManager.AddPoints(brick.PointValue));
-                // MainManager.AddPoints(brick.PointValue);
             }
         }
     }
@@ -77,35 +82,56 @@ public class GameManager : MonoBehaviour
     // Activate/Deactivate GameObjects to show the main menu
     void DisplayGameMenu()
     {
-        GameObject.Find("DeathZone").gameObject.SetActive(false);
-        GameObject.Find("Borders").gameObject.SetActive(false);
-        GameObject.Find("Paddle").gameObject.SetActive(false);
-        GameObject.Find("GameoverText").gameObject.SetActive(false);
+        Debug.Log(MenuElements.Count);
+        foreach (var item in MenuElements)
+        {
+            item.SetActive(true);
+        } 
 
-        GameObject.Find("MainMenu").gameObject.SetActive(true);
+        foreach (var item in GameElements)
+        {
+            item.SetActive(false);
+        } 
+
+        foreach (var item in GameOverElements)
+        {
+            item.SetActive(false);
+        } 
     }
 
     // Activate/Deactivate GameObjects to show the game
     void ShowGame()
     {
-        GameObject.Find("DeathZone").gameObject.SetActive(true);
-        GameObject.Find("Borders").gameObject.SetActive(true);
-        GameObject.Find("Paddle").gameObject.SetActive(true);
-        GameObject.Find("GameoverText").gameObject.SetActive(true);
+        foreach (var item in MenuElements)
+        {
+            item.SetActive(false);
+        } 
 
-        GameObject.Find("MainMenu").gameObject.SetActive(false);
+        foreach (var item in GameElements)
+        {
+            item.SetActive(true);
+        } 
+
+        foreach (var item in GameOverElements)
+        {
+            item.SetActive(false);
+        } 
     }
 
     // Launch the game
-    void GameLaunch()
+    public void GameLaunch()
     {
         DisplayGameMenu();
         MainManager.LoadSession();
     }
 
-    // Get player info
-    // void GetPlayerInfo()
-    // {
-    //     CurrentScorePlayer = nameInput.text;
-    // }
+    // Quit the game
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
+    }
 }
