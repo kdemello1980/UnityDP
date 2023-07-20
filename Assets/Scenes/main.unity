@@ -143,7 +143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &97436042
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -682,7 +682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &474497239
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1412,7 +1412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1066359100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2097,7 +2097,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1550576933
 Transform:
   m_ObjectHideFlags: 0
@@ -2558,12 +2558,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BrickPrefab: {fileID: 897975713663390409, guid: 63f25b9733d2bcd4fa2ff6de1264c739, type: 3}
   LineCount: 6
-  Ball: {fileID: 0}
+  Ball: {fileID: 177912862}
   startButton: {fileID: 694676286}
   quitButton: {fileID: 1384567099}
   nameInput: {fileID: 1112780086}
   scoreText: {fileID: 1663927904}
   bestScoreText: {fileID: 202042273}
+  MenuElements:
+  - {fileID: 2056380969}
+  GameElements:
+  - {fileID: 1066359099}
+  - {fileID: 1550576932}
+  - {fileID: 97436041}
+  GameOverElements:
+  - {fileID: 474497238}
 --- !u!4 &1927550905
 Transform:
   m_ObjectHideFlags: 0

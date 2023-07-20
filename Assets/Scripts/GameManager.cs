@@ -36,21 +36,22 @@ public class GameManager : MonoBehaviour
     // Start the actual game
     public void StartGame()
     {
-        MainManager.GameStarted = true;
         ShowGame();
-        const float step = -1.6f;
-        int perLine = Mathf.FloorToInt(3.0f / step);
+        // MainManager.GameStarted = true;
+        // const float step = -1.6f;
+        // int perLine = Mathf.FloorToInt(3.0f / step);
         
-        int[] pointCountArray = new [] {0,1,2,2,5,5};
-        for (int i = -1; i < LineCount; ++i)
-        {
-            for (int x = -1; x < perLine; ++x)
-            {
-                Vector2 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
-                var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
-                brick.PointValue = pointCountArray[i];
-            }
-        }
+        // int[] pointCountArray = new [] {0,1,2,2,5,5};
+        // for (int i = -1; i < LineCount; ++i)
+        // {
+        //     for (int x = -1; x < perLine; ++x)
+        //     {
+        //         Vector2 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
+        //         Debug.Log(position);
+        //         var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
+        //         brick.PointValue = pointCountArray[i];
+        //     }
+        // }
     }
 
     // Update is called once per frame
@@ -69,6 +70,24 @@ public class GameManager : MonoBehaviour
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
 
+        }
+        else if (!MainManager.GameStarted)
+        {
+            const float step = -1.6f;
+            int perLine = Mathf.FloorToInt(3.0f / step);
+            
+            int[] pointCountArray = new [] {0,1,2,2,5,5};
+            for (int i = -1; i < LineCount; ++i)
+            {
+                for (int x = -1; x < perLine; ++x)
+                {
+                    Vector2 position = new Vector3(-1.5f + step * x, 2.5f + i * 0.3f, 0);
+                    Debug.Log(position);
+                    var brick = Instantiate(BrickPrefab, position, Quaternion.identity);
+                    brick.PointValue = pointCountArray[i];
+                }
+            }
+            MainManager.GameStarted = true;
         }
         else if (MainManager.GameOver)
         {
@@ -100,7 +119,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Activate/Deactivate GameObjects to show the game
-    void ShowGame()
+    public void ShowGame()
     {
         foreach (var item in MenuElements)
         {
@@ -116,6 +135,7 @@ public class GameManager : MonoBehaviour
         {
             item.SetActive(false);
         } 
+        StartGame();
     }
 
     // Launch the game
