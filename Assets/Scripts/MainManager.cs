@@ -11,12 +11,14 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text HighScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+    private bool m_GameSaved = false;
 
     
     // Start is called before the first frame update
@@ -36,6 +38,11 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        DataManager.Instance.m_CurrentScore = 0;
+        m_GameSaved = false;
+        HighScoreText.text = $"High Score: {DataManager.Instance.m_HighScoreName} : {DataManager.Instance.m_HighScore}";
+        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScore}";
     }
 
     private void Update()
@@ -55,6 +62,11 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            if (!m_GameSaved)
+            {
+                DataManager.Instance.SaveScores();
+                m_GameSaved = true;
+            }
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -64,13 +76,25 @@ public class MainManager : MonoBehaviour
 
     void AddPoint(int point)
     {
-        m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        Debug.Log("adding point");
+        DataManager.Instance.m_CurrentScore += point;
+        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScore}";
+
+        // compare with the high score and update score/name accordingly
+        if (DataManager.Instance.m_CurrentScore > DataManager.Instance.m_HighScore) 
+        {
+            DataManager.Instance.m_HighScore = DataManager.Instance.m_CurrentScore;
+            DataManager.Instance.m_HighScoreName = DataManager.Instance.m_CurrentScoreName;
+        }
+
+        HighScoreText.text = $"High Score: {DataManager.Instance.m_HighScoreName} : {DataManager.Instance.m_HighScore}";
     }
 
     public void GameOver()
     {
         m_GameOver = true;
+        DataManager.Instance.SaveScores();
         GameOverText.SetActive(true);
     }
+
 }
