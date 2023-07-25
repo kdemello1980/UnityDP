@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class MainManager : MonoBehaviour
 {
@@ -42,7 +45,7 @@ public class MainManager : MonoBehaviour
         DataManager.Instance.m_CurrentScore = 0;
         m_GameSaved = false;
         HighScoreText.text = $"High Score: {DataManager.Instance.m_HighScoreName} : {DataManager.Instance.m_HighScore}";
-        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScore}";
+        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScoreName} : {DataManager.Instance.m_CurrentScore}";
     }
 
     private void Update()
@@ -78,7 +81,7 @@ public class MainManager : MonoBehaviour
     {
         Debug.Log("adding point");
         DataManager.Instance.m_CurrentScore += point;
-        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScore}";
+        ScoreText.text = $"Score : {DataManager.Instance.m_CurrentScoreName} : {DataManager.Instance.m_CurrentScore}";
 
         // compare with the high score and update score/name accordingly
         if (DataManager.Instance.m_CurrentScore > DataManager.Instance.m_HighScore) 
@@ -96,5 +99,14 @@ public class MainManager : MonoBehaviour
         DataManager.Instance.SaveScores();
         GameOverText.SetActive(true);
     }
-
+    
+    public void QuitGame()
+    {
+        GameOver();
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
+    }
 }
